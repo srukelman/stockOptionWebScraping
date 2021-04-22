@@ -3,8 +3,9 @@ import requests as rq
 import operator as op
 from datetime import datetime
 
-f = open("optionDatav2.txt", "a")
+#f = open("optionDatav2.txt", "a")
 b= []
+s="="
 class Put:
     def __init__(self, name, strike, value, price):
         self.name=name
@@ -38,24 +39,30 @@ def is_number(s):
         return False
 
 def initWrite():
+    global s
     now = datetime.now() 
     #print("now =", now)
     # dd/mm/YY H:M:S
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     print("=================================================")
     #lineprepender("optionDatav2.txt","========================================================================================================================\n")
-    f.write("========================================================================================================================\n")
+    #f.write("========================================================================================================================\n")
+    s+="========================================================================================================================\n"
     print("DATE: ", dt_string)
     print('hellowo')
     #lineprepender("optionDatav2.txt","DATE: "+ dt_string+"\n")
     #lineprepender("optionDatav2.txt","hellowo")
-    f.write("DATE: "+ dt_string+"\n")
-    f.write("hellowo")
+    #f.write("DATE: "+ dt_string+"\n")
+    s+="DATE: "+ dt_string+"\n"
+    #f.write("hellowo")
+    s+="hellowo\n"
     print("=================================================")
     #lineprepender("optionDatav2.txt","========================================================================================================================\n")
-    f.write("========================================================================================================================\n")
+    #f.write("========================================================================================================================\n")
+    s+="========================================================================================================================\n"
 
 def scraper(url):
+    global s
     source = rq.get(url).text
     soup = bs(source, 'lxml')
     names = soup.find_all('td',class_="data-col0 Ta(start) Pstart(10px) Bdstartw(8px) Bdstarts(s) Bdstartc(t) in-the-money_Bdstartc($linkColor)")
@@ -83,23 +90,28 @@ def scraper(url):
             b.append(Put(i.name,i.strike,i.value,i.price))
             #print(i.print())
             #print()
-    print(len(b))
+    #print(len(b))
     #resultSort(b)
     
 
 def out():
+    global s
     for i in b:
         print(i.print())
         #lineprepender("optionDatav2.txt",i.print())
-        f.write(i.print())
+        #f.write(i.print())
+        s+=i.print()
         print()
         #lineprepender("optionDatav2.txt","\n")
-        f.write("\n---------------------------------------------------------------------------\n")
-    f.close()
+        #f.write("\n---------------------------------------------------------------------------\n")
+        s+="\n---------------------------------------------------------------------------\n"
+    lineprepender("optionDatav3.txt",s)
+    #f.close()
 
 
 
 def main():
+    global s
     urls = ["MMM", "AXP","AMGN","AAPL", "BA", "CAT", "CVX","CSCO","KO","DIS","DOW","GS","HD","HON","IBM","INTC","JNJ","MCD","MRK","MSFT","NKE","PG","CRM","TRV","UNH","V","WBA","WMT"]
     #urls = ["AAPL","AMGN"]
     initWrite()
