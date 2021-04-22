@@ -85,7 +85,7 @@ def scraper(url):
     #print(len(a))
     #b=[]
     for i in a:
-        print(i.strike+" "+i.value)
+        #print(i.strike+" "+i.value)
         if(float(i.strike)>=(0.93*float(i.value)) and float(i.strike)<=(0.97*float(i.value))):
             b.append(Put(i.name,i.strike,i.value,i.price))
             #print(i.print())
