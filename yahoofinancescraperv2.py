@@ -23,7 +23,7 @@ class Put:
     def setReturn(self,rtrn):
         self.rtrn = rtrn  
     def print(self):
-        return "CONTRACT NAME: " +self.name + "\nSTOCK TICKER: " + self.ticker + "\nEXPIRATION DATE: "+self.expDate+"\nSTOCK PRICE: $"+self.value+"\nSTRIKE PRICE: $" + self.strike +"\nBID: $"+ self.price + "\nRETURN: "+str(self.rtrn)
+        return "STOCK TICKER: " +self.ticker + "\nCONTRACT NAME: " + self.name + "\nEXPIRATION DATE: "+self.expDate+"\nCURRENT STOCK PRICE: $"+self.value+"\nSTRIKE PRICE: $" + self.strike +"\nBID: $"+ self.price + "\nRETURN: "+str(self.rtrn)
 
 def lineprepender(filename, line):
     with open(filename, 'r+') as f:
@@ -101,7 +101,7 @@ def out():
         #lineprepender("optionDatav2.txt",i.print())
         #f.write(i.print())
         s+=i.print()
-        print()
+        print("---------------------------------------------------------------------------")
         #lineprepender("optionDatav2.txt","\n")
         #f.write("\n---------------------------------------------------------------------------\n")
         s+="\n---------------------------------------------------------------------------\n"
