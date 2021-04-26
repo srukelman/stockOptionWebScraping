@@ -1,7 +1,8 @@
 from bs4 import BeautifulSoup as bs
 import requests as rq
 import operator as op
-from datetime import datetime
+from datetime import datetime,timedelta,date
+import csv
 
 f = open("optionDatav3.txt", "a")
 f.close()
@@ -17,6 +18,13 @@ class Put:
         self.ticker = self.name[0:self.name.index('21')]
         self.expDate = str(self.name[len(self.ticker):len(self.ticker)+6])
         self.expDate = str(self.expDate[2:4])+"/"+str(self.expDate[4:])+"/"+str(self.expDate[:2])
+        now = datetime.now()
+        expDateDate = now.strptime(self.expDate,"%m/%d/%y")
+        strnow= str(now)
+        strnow = strnow[5:7]+"/"+strnow[8:10]+"/"+strnow[2:4]
+        todayDate = now.strptime(strnow,"%m/%d/%y")
+        oneweek = todayDate + timedelta(days=7)
+        self.isExpiring = expDateDate < oneweek
     def getVolatility(self):
         return self.volatility
     def getReturn(self):
@@ -88,7 +96,8 @@ def scraper(url):
     for i in a:
         #print(i.strike+" "+i.value)
         if(float(i.strike)>=(0.93*float(i.value)) and float(i.strike)<=(0.97*float(i.value))):
-            b.append(Put(i.name,i.strike,i.value,i.price))
+            if(i.isExpiring):
+                b.append(Put(i.name,i.strike,i.value,i.price))
             #print(i.print())
             #print()
     #print(len(b))
