@@ -6,6 +6,8 @@ import csv
 
 f = open("optionDatav3.txt", "a")
 f.close()
+c = open("optionSpreadsheet.csv","a",newline="")
+c.close()
 b= []
 s="="
 class Put:
@@ -39,6 +41,12 @@ def lineprepender(filename, line):
         content = f.read()
         f.seek(0, 0)
         f.write(line.rstrip('\r\n') + '\n' + content)
+
+def rowprepender(filename, row):
+    with open (filename, 'a',newline='') as c:
+        writer = csv.writer(c)
+        
+
 
 def is_number(s):
     try:
