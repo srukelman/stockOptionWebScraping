@@ -6,7 +6,11 @@ import csv
 
 f = open("optionDatav3.txt", "a")
 f.close()
-c = open("optionSpreadsheet.csv","a",newline="")
+today = datetime.today()
+strtoday = str(today)
+strtoday = strtoday[:10]+"_"+strtoday[11:13]+strtoday[14:16]+strtoday[17:19] 
+cfilename = "optionSpreadsheet"+ strtoday +".csv"
+c = open(cfilename,"a",newline="")
 c.close()
 b= []
 s="="
@@ -17,6 +21,8 @@ class Put:
         self.value=value
         self.price=price
         self.rtrn = float(self.price)/float(self.value)
+        self.oom = 100*((float(self.value)-float(self.strike))/float(self.value))
+        self.apr = (float(self.price)/float(self.strike))*52*100
         self.ticker = self.name[0:self.name.index('21')]
         self.expDate = str(self.name[len(self.ticker):len(self.ticker)+6])
         self.expDate = str(self.expDate[2:4])+"/"+str(self.expDate[4:])+"/"+str(self.expDate[:2])
@@ -33,6 +39,8 @@ class Put:
         return self.rtrn
     def setReturn(self,rtrn):
         self.rtrn = rtrn  
+    def toArray(self):
+        return [self.ticker, "$"+str(self.value), "$"+self.strike, str(self.oom)+"%", "", "$"+str(self.price), str(self.apr)+"%"]
     def print(self):
         return "STOCK TICKER: " +self.ticker + "\nCONTRACT NAME: " + self.name + "\nEXPIRATION DATE: "+self.expDate+"\nCURRENT STOCK PRICE: $"+self.value+"\nSTRIKE PRICE: $" + self.strike +"\nBID: $"+ self.price + "\nRETURN: "+str(self.rtrn)
 
@@ -42,11 +50,15 @@ def lineprepender(filename, line):
         f.seek(0, 0)
         f.write(line.rstrip('\r\n') + '\n' + content)
 
-def rowprepender(filename, row):
-    with open (filename, 'a',newline='') as c:
+def csvwriter(row):
+    with open (cfilename, 'a',newline='') as c:
         writer = csv.writer(c)
+        writer.writerow(row)
         
-
+def csvinit(fields):
+    with open (cfilename, 'w',newline='') as c:
+        writer = csv.writer(c)
+        writer.writerow(fields)
 
 def is_number(s):
     try:
@@ -57,8 +69,11 @@ def is_number(s):
 
 def initWrite():
     global s
+    #global cfilename
     now = datetime.now() 
     #print("now =", now)
+    fields = ["TICKER", "CURRENT PRICE", "STRIKE PRICE", "OOM", "ODDS EIM", "BID", "APR"]
+    csvinit(fields)
     # dd/mm/YY H:M:S
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     print("=================================================")
@@ -116,6 +131,7 @@ def out():
     global s
     for i in b:
         print(i.print())
+        csvwriter(i.toArray())
         #lineprepender("optionDatav2.txt",i.print())
         #f.write(i.print())
         s+=i.print()
