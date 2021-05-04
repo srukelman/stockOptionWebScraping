@@ -20,9 +20,12 @@ class Put:
         self.strike=strike
         self.value=value
         self.price=price
-        self.rtrn = float(self.price)/float(self.value)
-        self.oom = 100*((float(self.value)-float(self.strike))/float(self.value))
-        self.apr = (float(self.price)/float(self.strike))*52*100
+        temprtrn = (float(self.price)/float(self.value))*100
+        self.rtrn = format(temprtrn,'.3f')
+        tempoom = 100*((float(self.value)-float(self.strike))/float(self.value))
+        self.oom = format(tempoom,'.3f')
+        tempapr = (float(self.price)/float(self.strike))*52*100
+        self.apr = format(tempapr,'.3f')
         self.ticker = self.name[0:self.name.index('21')]
         self.expDate = str(self.name[len(self.ticker):len(self.ticker)+6])
         self.expDate = str(self.expDate[2:4])+"/"+str(self.expDate[4:])+"/"+str(self.expDate[:2])
@@ -42,7 +45,7 @@ class Put:
     def toArray(self):
         return [self.ticker, "$"+str(self.value), "$"+self.strike, str(self.oom)+"%", "", "$"+str(self.price), str(self.apr)+"%"]
     def print(self):
-        return "STOCK TICKER: " +self.ticker + "\nCONTRACT NAME: " + self.name + "\nEXPIRATION DATE: "+self.expDate+"\nCURRENT STOCK PRICE: $"+self.value+"\nSTRIKE PRICE: $" + self.strike +"\nBID: $"+ self.price + "\nRETURN: "+str(self.rtrn)
+        return "STOCK TICKER: " +self.ticker + "\nCONTRACT NAME: " + self.name + "\nEXPIRATION DATE: "+self.expDate+"\nCURRENT STOCK PRICE: $"+self.value+"\nSTRIKE PRICE: $" + self.strike +"\nBID: $"+ self.price + "\nRETURN: "+str(self.rtrn)+"%"
 
 def lineprepender(filename, line):
     with open(filename, 'r+') as f:
