@@ -1,10 +1,14 @@
 # stockOptionWebScraping
 scraping websites to get information for trading options.
+
 parental advisory: don't let your kids use this program to invest without adult supervision.
+
 disclaimer: this product does not give you all the information you need to trade options, it simply suggests options and you need to do more research on your own.
+
 disclaimer: I am not responsible for money lost while trading while using information gathered by my apps.
 
 about each file:
+
 yahoofinancescraper.py:
    this was my first iteration it is just like v2 but a litttle less functionality
 
