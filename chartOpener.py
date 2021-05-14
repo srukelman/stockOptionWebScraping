@@ -1,5 +1,5 @@
 import webbrowser
-import urllib
+#import urllib
 from tkinter import *
 
 global tickers
