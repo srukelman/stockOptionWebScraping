@@ -10,9 +10,9 @@ def main_screen():
     screen = Tk()
     screen.geometry("300x250")
     screen.title("Chart Opener")
-    Label(text="Chart Opener", bg = "grey", width = "300", height = "2", font ={"Calibri", 13}).pack()
-    Label(text="",  width = "300", height = "1", font ={"Calibri", 13}).pack()
-    Button(text = "Go!", height="2", width = "30", command = num_charts).pack()
+    Label(screen, text="Chart Opener", bg = "grey", width = "300", height = "2", font ={"Calibri", 13}).pack()
+    Label(screen, text="",  width = "300", height = "1", font ={"Calibri", 13}).pack()
+    Button(screen, text = "Go!", height="2", width = "30", command = num_charts).pack()
     screen.mainloop()
 
 def num_charts():
