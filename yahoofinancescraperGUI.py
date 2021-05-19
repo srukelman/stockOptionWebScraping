@@ -20,8 +20,10 @@ lab2 = None
 lab3 = None
 lab4 = None
 lab5 = None
+but1 = None
 scraperIsDone = False
 scraperIsStarted = False
+screen = None
 screen1 = None
 urls = ["MMM", "AXP","AMGN","AAPL", "BA", "CAT", "CVX","CSCO","KO","DIS","DOW","GS","HD","HON","IBM","INTC","JNJ","MCD","MRK","MSFT","NKE","PG","CRM","TRV","UNH","V","WBA","WMT"]
 
@@ -144,11 +146,24 @@ def run_scraper():
     global urls
     global scraperIsStarted
     global scraperIsDone
+    global lab1
+    global screen1
+    
     scraperIsStarted = True
     initWrite()
+    count = 1
 
     for i in urls:
         scraper("https://finance.yahoo.com/quote/"+i+"/options?p="+i)
+        num = count % 3
+        label = {
+            1: "Scraping the DOW...",
+            2: "Scraping the DOW.",
+            0: "Scraping the DOW.."
+        }
+        lab1.config(text = str(label.get(num,"Scraping the DOW...")))
+        screen1.mainloop
+
 
     b.sort(key = op.attrgetter('rtrn'), reverse = True)
     out()
@@ -170,6 +185,7 @@ def out():
     #f.close()
 
 def intro_screen():
+    global screen
     screen = Tk()
     screen.geometry("500x500")
     screen.title("Yahoo Finance Scraper")
@@ -179,7 +195,7 @@ def intro_screen():
     Button(text = "Go!", height="2", width = "30", command = scrape_dow).pack()
     Label(screen, text="",  width = "300", height = "1", font ={"Calibri", 13}).pack()
     Label(screen, text="Select a few stocks to scrape:",  width = "300", height = "1", font ={"Calibri", 13}).pack()
-    Button(text = "Go!", height="2", width = "30", command = scrape_dow).pack()
+    Button(text = "Go!", height="2", width = "30", command = scrape_select).pack()
     screen.mainloop()
 
 def scrape_dow():
@@ -189,9 +205,8 @@ def scrape_dow():
     screen1.title("Yahoo Finance Scraper")
     Label(screen1, text="Yahoo Finance Scraper", bg = "grey", width = "300", height = "2", font ={"Calibri", 13}).pack()
     Label(screen1, text="",  width = "300", height = "1", font ={"Calibri", 13}).pack()
-    Label(screen1, text="Scraping the Dow...",  width = "300", height = "1", font ={"Calibri", 13}).pack()
     global lab1
-    lab1 = Label(screen1)
+    lab1 = Label(screen1, text="Scraping the Dow...",  width = "300", height = "1", font ={"Calibri", 13})
     lab1.pack()
     global lab2
     lab2 = Label(screen1)
@@ -218,11 +233,14 @@ def dow_update():
     global lab4
     global lab5
     global screen1
+    global screen
+    screen.destroy()
     if not scraperIsStarted:
         run_scraper()
     if scraperIsDone:
         lab1.config(text = "Scraping is complete!")
     else:
+        lab1.config(text = "Scraping the Dow...")
         screen1.after(1000, dow_update)
 
 
