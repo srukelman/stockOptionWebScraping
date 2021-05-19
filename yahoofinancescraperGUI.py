@@ -14,7 +14,16 @@ cfilename = "optionSpreadsheet"+ strtoday +".csv"
 c = open(cfilename,"a",newline="")
 c.close()
 b= []
-s="="
+s= "="
+lab1= None
+lab2 = None
+lab3 = None
+lab4 = None
+lab5 = None
+scraperIsDone = False
+scraperIsStarted = False
+screen1 = None
+urls = ["MMM", "AXP","AMGN","AAPL", "BA", "CAT", "CVX","CSCO","KO","DIS","DOW","GS","HD","HON","IBM","INTC","JNJ","MCD","MRK","MSFT","NKE","PG","CRM","TRV","UNH","V","WBA","WMT"]
 
 class Put:
     def __init__(self, name, strike, value, price):
@@ -131,6 +140,19 @@ def scraper(url):
     #print(len(b))
     #resultSort(b)
     
+def run_scraper():
+    global urls
+    global scraperIsStarted
+    global scraperIsDone
+    scraperIsStarted = True
+    initWrite()
+
+    for i in urls:
+        scraper("https://finance.yahoo.com/quote/"+i+"/options?p="+i)
+
+    b.sort(key = op.attrgetter('rtrn'), reverse = True)
+    out()
+    scraperIsDone = True
 
 def out():
     global s
@@ -161,13 +183,47 @@ def intro_screen():
     screen.mainloop()
 
 def scrape_dow():
+    global screen1
     screen1 = Tk()
     screen1.geometry("500x500")
     screen1.title("Yahoo Finance Scraper")
     Label(screen1, text="Yahoo Finance Scraper", bg = "grey", width = "300", height = "2", font ={"Calibri", 13}).pack()
     Label(screen1, text="",  width = "300", height = "1", font ={"Calibri", 13}).pack()
     Label(screen1, text="Scraping the Dow...",  width = "300", height = "1", font ={"Calibri", 13}).pack()
+    global lab1
+    lab1 = Label(screen1)
+    lab1.pack()
+    global lab2
+    lab2 = Label(screen1)
+    lab2.pack()
+    global lab3
+    lab3 = Label(screen1)
+    lab3.pack()
+    global lab4
+    lab4 = Label(screen1)
+    lab4.pack()
+    global lab5
+    lab5 = Label(screen1)
+    lab5.pack()
+    dow_update()      
     screen1.mainloop()
+    dow_update() 
+
+def dow_update():
+    global scraperIsDone
+    global scraperIsStarted
+    global lab1
+    global lab2
+    global lab3
+    global lab4
+    global lab5
+    global screen1
+    if not scraperIsStarted:
+        run_scraper()
+    if scraperIsDone:
+        lab1.config(text = "Scraping is complete!")
+    else:
+        screen1.after(1000, dow_update)
 
 
 def scrape_select():
