@@ -21,6 +21,7 @@ lab3 = None
 lab4 = None
 lab5 = None
 but1 = None
+but2 = None
 scraperIsDone = False
 scraperIsStarted = False
 screen = None
@@ -162,7 +163,7 @@ def run_scraper():
             0: "Scraping the DOW.."
         }
         lab1.config(text = str(label.get(num,"Scraping the DOW...")))
-        screen1.mainloop
+        screen1.update()
 
 
     b.sort(key = op.attrgetter('rtrn'), reverse = True)
@@ -200,6 +201,8 @@ def intro_screen():
 
 def scrape_dow():
     global screen1
+    global screen
+    screen.destroy()
     screen1 = Tk()
     screen1.geometry("500x500")
     screen1.title("Yahoo Finance Scraper")
@@ -220,6 +223,12 @@ def scrape_dow():
     global lab5
     lab5 = Label(screen1)
     lab5.pack()
+    global but1
+    but1 = Button(screen1)
+    but1.pack()
+    global but2
+    but2 = Button(screen1)
+    but2.pack()
     dow_update()      
     screen1.mainloop()
     dow_update() 
@@ -232,21 +241,30 @@ def dow_update():
     global lab3
     global lab4
     global lab5
+    global but1
     global screen1
-    global screen
-    screen.destroy()
+    
     if not scraperIsStarted:
         run_scraper()
     if scraperIsDone:
         lab1.config(text = "Scraping is complete!")
+        lab2.config(text = "",  width = "300", height = "1", font ={"Calibri", 13})
+        but1.config(text = "Scrape Again", height="2", width = "30", command = intro_screen)
+        lab3.config(text = "",  width = "300", height = "1", font ={"Calibri", 13})
+        but2.config(text = "Quit", height="2", width = "30", command = quit_screen1)
     else:
         lab1.config(text = "Scraping the Dow...")
         screen1.after(1000, dow_update)
 
+def quit_screen1():
+    global screen1
+    screen1.destroy()
 
 def scrape_select():
     pass
 
+def select_update():
+    pass
 
 def main():
     intro_screen()
