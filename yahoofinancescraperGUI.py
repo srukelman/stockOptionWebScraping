@@ -5,6 +5,17 @@ from datetime import datetime,timedelta,date
 import csv
 from tkinter import *
 
+f = open("optionDatav3.txt", "a")
+f.close()
+today = datetime.today()
+strtoday = str(today)
+strtoday = strtoday[:10]+"_"+strtoday[11:13]+strtoday[14:16]+strtoday[17:19] 
+cfilename = "optionSpreadsheet"+ strtoday +".csv"
+c = open(cfilename,"a",newline="")
+c.close()
+b= []
+s="="
+
 class Put:
     def __init__(self, name, strike, value, price):
         self.name=name
