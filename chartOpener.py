@@ -4,6 +4,12 @@ from tkinter import *
 
 global tickers
 tickers = []
+screen = None
+screen1 = None
+numString = None
+screen2 = None
+tickerString = None
+screen3 = None
 
 def main_screen():
     global screen
