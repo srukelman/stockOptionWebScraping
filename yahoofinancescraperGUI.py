@@ -26,7 +26,9 @@ scraperIsDone = False
 scraperIsStarted = False
 screen = None
 screen1 = None
-urls = ["MMM", "AXP","AMGN","AAPL", "BA", "CAT", "CVX","CSCO","KO","DIS","DOW","GS","HD","HON","IBM","INTC","JNJ","MCD","MRK","MSFT","NKE","PG","CRM","TRV","UNH","V","WBA","WMT"]
+screen2 = None
+screen3 = None
+urls = []
 
 class Put:
     def __init__(self, name, strike, value, price):
@@ -112,7 +114,15 @@ def initWrite():
 
 def scraper(url):
     global s
-    source = rq.get(url).text
+    global s
+    headers = { 
+        'User-Agent'      : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36', 
+        'Accept'          : 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 
+        'Accept-Language' : 'en-US,en;q=0.5',
+        'DNT'             : '1', # Do Not Track Request Header 
+        'Connection'      : 'close'
+    }
+    source = rq.get(url,headers=headers).text
     soup = bs(source, 'lxml')
     names = soup.find_all('td',class_="data-col0 Ta(start) Pstart(10px) Bdstartw(8px) Bdstarts(s) Bdstartc(t) in-the-money_Bdstartc($linkColor)")
     strikes = soup.find_all('td',class_="data-col2 Ta(end) Px(10px)")
@@ -153,6 +163,7 @@ def run_scraper():
     scraperIsStarted = True
     initWrite()
     count = 1
+    urls = ["MMM", "AXP","AMGN","AAPL", "BA", "CAT", "CVX","CSCO","KO","DIS","DOW","GS","HD","HON","IBM","INTC","JNJ","MCD","MRK","MSFT","NKE","PG","CRM","TRV","UNH","V","WBA","WMT"]
 
     for i in urls:
         scraper("https://finance.yahoo.com/quote/"+i+"/options?p="+i)
@@ -225,10 +236,10 @@ def scrape_dow():
     lab5.pack()
     global but1
     but1 = Button(screen1)
-    but1.pack()
+    but1.pack_forget()
     global but2
     but2 = Button(screen1)
-    but2.pack()
+    but2.pack_forget()
     dow_update()      
     screen1.mainloop()
     dow_update() 
@@ -249,11 +260,13 @@ def dow_update():
     if scraperIsDone:
         lab1.config(text = "Scraping is complete!")
         lab2.config(text = "",  width = "300", height = "1", font ={"Calibri", 13})
+        but1.pack()
         but1.config(text = "Scrape Again", height="2", width = "30", command = intro_screen)
         lab3.config(text = "",  width = "300", height = "1", font ={"Calibri", 13})
+        but2.pack()
         but2.config(text = "Quit", height="2", width = "30", command = quit_screen1)
     else:
-        lab1.config(text = "Scraping the Dow...")
+        #lab1.config(text = "Scraping the Dow...")
         screen1.after(1000, dow_update)
 
 def quit_screen1():
@@ -261,7 +274,12 @@ def quit_screen1():
     screen1.destroy()
 
 def scrape_select():
-    pass
+    global screen2
+    global screen3
+    global urls
+    screen2 = Tk()
+    #screen3 = Tk()
+
 
 def select_update():
     pass

@@ -98,9 +98,18 @@ def initWrite():
 
 def scraper(url):
     global s
-    source = rq.get(url).text
+    headers = { 
+        'User-Agent'      : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36', 
+        'Accept'          : 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 
+        'Accept-Language' : 'en-US,en;q=0.5',
+        'DNT'             : '1', # Do Not Track Request Header 
+        'Connection'      : 'close'
+    }
+    source = rq.get(url, headers=headers).text
     soup = bs(source, 'lxml')
+    #print(soup)
     names = soup.find_all('td',class_="data-col0 Ta(start) Pstart(10px) Bdstartw(8px) Bdstarts(s) Bdstartc(t) in-the-money_Bdstartc($linkColor)")
+    # print(names)
     strikes = soup.find_all('td',class_="data-col2 Ta(end) Px(10px)")
     value = soup.find('span',class_="Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)")
     prices = soup.find_all('td',class_="data-col4 Ta(end) Pstart(7px)")
@@ -149,12 +158,14 @@ def out():
 
 def main():
     global s
-    urls = ["MMM", "AXP","AMGN","AAPL", "BA", "CAT", "CVX","CSCO","KO","DIS","DOW","GS","HD","HON","IBM","INTC","JNJ","MCD","MRK","MSFT","NKE","PG","CRM","TRV","UNH","V","WBA","WMT"]
-    #urls = ["AAPL","AMGN"]
+    #urls = ["MMM", "AXP","AMGN","AAPL", "BA", "CAT", "CVX","CSCO","KO","DIS","DOW","GS","HD","HON","IBM","INTC","JNJ","MCD","MRK","MSFT","NKE","PG","CRM","TRV","UNH","V","WBA","WMT"]
+    urls = ["AAPL","AMGN"]
     initWrite()
 
     for i in urls:
         scraper("https://finance.yahoo.com/quote/"+i+"/options?p="+i)
+        #print("https://finance.yahoo.com/quote/"+i+"/options?p="+i)
+        #https://finance.yahoo.com/quote/AAPL/options?p=AAPL
 
     b.sort(key = op.attrgetter('rtrn'), reverse = True)
     out()
