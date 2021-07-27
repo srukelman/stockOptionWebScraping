@@ -43,7 +43,7 @@ class Put:
     def setReturn(self,rtrn):
         self.rtrn = rtrn  
     def toArray(self):
-        return [self.ticker, "$"+str(self.value), "$"+self.strike, str(self.oom)+"%", "", "$"+str(self.price), str(self.apr)+"%"]
+        return [self.ticker, "$"+str(self.value), "$"+self.strike, str(self.oom)+"%", "", "$"+str(self.price), str(self.apr)+"%",str(self.expDate),str(self.rtrn)]
     def print(self):
         return "STOCK TICKER: " +self.ticker + "\nCONTRACT NAME: " + self.name + "\nEXPIRATION DATE: "+self.expDate+"\nCURRENT STOCK PRICE: $"+self.value+"\nSTRIKE PRICE: $" + self.strike +"\nBID: $"+ self.price + "\nRETURN: "+str(self.rtrn)+"%"
 
@@ -75,7 +75,7 @@ def initWrite():
     #global cfilename
     now = datetime.now() 
     #print("now =", now)
-    fields = ["TICKER", "CURRENT PRICE", "STRIKE PRICE", "OOM", "ODDS EIM", "BID", "APR"]
+    fields = ["TICKER", "CURRENT PRICE", "STRIKE PRICE", "OOM", "ODDS EIM", "BID", "APR","EXP"]
     csvinit(fields)
     # dd/mm/YY H:M:S
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
@@ -130,8 +130,8 @@ def scraper(url):
     #b=[]
     for i in a:
         #print(i.strike+" "+i.value)
-        if(float(i.strike)>=(0.93*float(i.value)) and float(i.strike)<=(0.97*float(i.value))):
-            if(i.isExpiring):
+        #if(float(i.strike)>=(0.93*float(i.value)) and float(i.strike)<=(0.97*float(i.value))):
+            #if(i.isExpiring):
                 b.append(Put(i.name,i.strike,i.value,i.price))
             #print(i.print())
             #print()
@@ -159,7 +159,7 @@ def out():
 def main():
     global s
     #urls = ["MMM", "AXP","AMGN","AAPL", "BA", "CAT", "CVX","CSCO","KO","DIS","DOW","GS","HD","HON","IBM","INTC","JNJ","MCD","MRK","MSFT","NKE","PG","CRM","TRV","UNH","V","WBA","WMT"]
-    urls = ["AAPL","AMGN"]
+    urls = ["AFRM"]
     initWrite()
 
     for i in urls:

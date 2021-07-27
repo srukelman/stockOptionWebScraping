@@ -4,15 +4,17 @@ import operator as op
 from datetime import datetime,timedelta,date
 import csv
 from tkinter import *
+import os
 
-f = open("optionDatav3.txt", "a")
-f.close()
 today = datetime.today()
 strtoday = str(today)
 strtoday = strtoday[:10]+"_"+strtoday[11:13]+strtoday[14:16]+strtoday[17:19] 
 cfilename = "optionSpreadsheet"+ strtoday +".csv"
+tfilename = "optionTextfile"+ strtoday +".txt"
 c = open(cfilename,"a",newline="")
 c.close()
+f = open(tfilename, "a")
+f.close()
 b= []
 s= "="
 lab1= None
@@ -22,6 +24,8 @@ lab4 = None
 lab5 = None
 but1 = None
 but2 = None
+but3 = None
+but4 = None
 scraperIsDone = False
 scraperIsStarted = False
 screen = None
@@ -29,7 +33,7 @@ screen1 = None
 screen2 = None
 screen3 = None
 urls = []
-
+count =0
 class Put:
     def __init__(self, name, strike, value, price):
         self.name=name
@@ -175,6 +179,7 @@ def run_scraper():
         }
         lab1.config(text = str(label.get(num,"Scraping the DOW...")))
         screen1.update()
+        count+=1
 
 
     b.sort(key = op.attrgetter('rtrn'), reverse = True)
@@ -197,6 +202,9 @@ def out():
     #f.close()
 
 def intro_screen():
+    global scraperIsDone
+    if scraperIsDone: quit_screen1()
+    scraperIsDone=False
     global screen
     screen = Tk()
     screen.geometry("500x500")
@@ -240,6 +248,12 @@ def scrape_dow():
     global but2
     but2 = Button(screen1)
     but2.pack_forget()
+    global but3
+    but3 = Button(screen1)
+    but3.pack_forget()
+    global but4
+    but4 = Button(screen1)
+    but4.pack_forget()
     dow_update()      
     screen1.mainloop()
     dow_update() 
@@ -253,6 +267,9 @@ def dow_update():
     global lab4
     global lab5
     global but1
+    global but2
+    global but3
+    global but4
     global screen1
     
     if not scraperIsStarted:
@@ -263,6 +280,12 @@ def dow_update():
         but1.pack()
         but1.config(text = "Scrape Again", height="2", width = "30", command = intro_screen)
         lab3.config(text = "",  width = "300", height = "1", font ={"Calibri", 13})
+        but3.pack()
+        but3.config(text = "Open Text File", height="2", width = "30", command = open_txt)
+        lab3.config(text = "",  width = "300", height = "1", font ={"Calibri", 13})
+        but4.pack()
+        but4.config(text = "Open CSV File", height="2", width = "30", command = open_csv)
+        lab3.config(text = "",  width = "300", height = "1", font ={"Calibri", 13})
         but2.pack()
         but2.config(text = "Quit", height="2", width = "30", command = quit_screen1)
     else:
@@ -272,6 +295,14 @@ def dow_update():
 def quit_screen1():
     global screen1
     screen1.destroy()
+
+def open_txt():
+
+    os.system("notepad "+tfilename)
+
+def open_csv():
+
+    os.system("start excel "+cfilename)
 
 def scrape_select():
     global screen2
