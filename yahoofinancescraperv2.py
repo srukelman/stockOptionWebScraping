@@ -130,8 +130,8 @@ def scraper(url):
     #b=[]
     for i in a:
         #print(i.strike+" "+i.value)
-        #if(float(i.strike)>=(0.93*float(i.value)) and float(i.strike)<=(0.97*float(i.value))):
-            #if(i.isExpiring):
+        if(float(i.strike)>=(0.93*float(i.value)) and float(i.strike)<=(0.97*float(i.value))):
+            if(i.isExpiring):
                 b.append(Put(i.name,i.strike,i.value,i.price))
             #print(i.print())
             #print()
@@ -158,8 +158,8 @@ def out():
 
 def main():
     global s
-    #urls = ["MMM", "AXP","AMGN","AAPL", "BA", "CAT", "CVX","CSCO","KO","DIS","DOW","GS","HD","HON","IBM","INTC","JNJ","MCD","MRK","MSFT","NKE","PG","CRM","TRV","UNH","V","WBA","WMT"]
-    urls = ["AFRM"]
+    urls = ["MMM", "AXP","AMGN","AAPL", "BA", "CAT", "CVX","CSCO","KO","DIS","DOW","GS","HD","HON","IBM","INTC","JNJ","MCD","MRK","MSFT","NKE","PG","CRM","TRV","UNH","V","WBA","WMT"]
+    #urls = ["AFRM"]
     initWrite()
 
     for i in urls:

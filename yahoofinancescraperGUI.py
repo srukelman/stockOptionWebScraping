@@ -26,13 +26,19 @@ but1 = None
 but2 = None
 but3 = None
 but4 = None
+but5 = None
+but6 = None
+but7 = None
+ent1 = None
+ent2 = None
+ent3 = None
 scraperIsDone = False
 scraperIsStarted = False
 screen = None
 screen1 = None
 screen2 = None
 screen3 = None
-urls = []
+#urls = []
 count =0
 class Put:
     def __init__(self, name, strike, value, price):
@@ -157,8 +163,8 @@ def scraper(url):
     #print(len(b))
     #resultSort(b)
     
-def run_scraper():
-    global urls
+def run_scraper(urls):
+    #global urls
     global scraperIsStarted
     global scraperIsDone
     global lab1
@@ -167,7 +173,7 @@ def run_scraper():
     scraperIsStarted = True
     initWrite()
     count = 1
-    urls = ["MMM", "AXP","AMGN","AAPL", "BA", "CAT", "CVX","CSCO","KO","DIS","DOW","GS","HD","HON","IBM","INTC","JNJ","MCD","MRK","MSFT","NKE","PG","CRM","TRV","UNH","V","WBA","WMT"]
+    #urls = ["MMM", "AXP","AMGN","AAPL", "BA", "CAT", "CVX","CSCO","KO","DIS","DOW","GS","HD","HON","IBM","INTC","JNJ","MCD","MRK","MSFT","NKE","PG","CRM","TRV","UNH","V","WBA","WMT"]
 
     for i in urls:
         scraper("https://finance.yahoo.com/quote/"+i+"/options?p="+i)
@@ -271,9 +277,9 @@ def dow_update():
     global but3
     global but4
     global screen1
-    
+    urls = ["MMM", "AXP","AMGN","AAPL", "BA", "CAT", "CVX","CSCO","KO","DIS","DOW","GS","HD","HON","IBM","INTC","JNJ","MCD","MRK","MSFT","NKE","PG","CRM","TRV","UNH","V","WBA","WMT"]
     if not scraperIsStarted:
-        run_scraper()
+        run_scraper(urls)
     if scraperIsDone:
         lab1.config(text = "Scraping is complete!")
         lab2.config(text = "",  width = "300", height = "1", font ={"Calibri", 13})
@@ -307,13 +313,44 @@ def open_csv():
 def scrape_select():
     global screen2
     global screen3
-    global urls
+    #global urls
     screen2 = Tk()
     #screen3 = Tk()
 
 
 def select_update():
-    pass
+    global scraperIsDone
+    global scraperIsStarted
+    global lab1
+    global lab2
+    global lab3
+    global lab4
+    global lab5
+    global but1
+    global but2
+    global but3
+    global but4
+    global screen1
+    
+    if not scraperIsStarted:
+        run_scraper()
+    if scraperIsDone:
+        lab1.config(text = "Scraping is complete!")
+        lab2.config(text = "",  width = "300", height = "1", font ={"Calibri", 13})
+        but1.pack()
+        but1.config(text = "Scrape Again", height="2", width = "30", command = intro_screen)
+        lab3.config(text = "",  width = "300", height = "1", font ={"Calibri", 13})
+        but3.pack()
+        but3.config(text = "Open Text File", height="2", width = "30", command = open_txt)
+        lab3.config(text = "",  width = "300", height = "1", font ={"Calibri", 13})
+        but4.pack()
+        but4.config(text = "Open CSV File", height="2", width = "30", command = open_csv)
+        lab3.config(text = "",  width = "300", height = "1", font ={"Calibri", 13})
+        but2.pack()
+        but2.config(text = "Quit", height="2", width = "30", command = quit_screen1)
+    else:
+        #lab1.config(text = "Scraping the Dow...")
+        screen1.after(1000, dow_update)
 
 def main():
     intro_screen()
