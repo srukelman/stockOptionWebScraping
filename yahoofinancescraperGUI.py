@@ -17,6 +17,7 @@ f = open(tfilename, "a")
 f.close()
 b= []
 s= "="
+cont = True
 lab1= None
 lab2 = None
 lab3 = None
@@ -32,13 +33,16 @@ but7 = None
 ent1 = None
 ent2 = None
 ent3 = None
+numString =None
+tickerString = None
 scraperIsDone = False
 scraperIsStarted = False
 screen = None
 screen1 = None
 screen2 = None
 screen3 = None
-#urls = []
+screen4 = None
+urls = []
 count =0
 class Put:
     def __init__(self, name, strike, value, price):
@@ -235,6 +239,7 @@ def scrape_dow():
     Label(screen1, text="",  width = "300", height = "1", font ={"Calibri", 13}).pack()
     global lab1
     lab1 = Label(screen1, text="Scraping the Dow...",  width = "300", height = "1", font ={"Calibri", 13})
+    urls = ["MMM", "AXP","AMGN","AAPL", "BA", "CAT", "CVX","CSCO","KO","DIS","DOW","GS","HD","HON","IBM","INTC","JNJ","MCD","MRK","MSFT","NKE","PG","CRM","TRV","UNH","V","WBA","WMT"]
     lab1.pack()
     global lab2
     lab2 = Label(screen1)
@@ -277,7 +282,8 @@ def dow_update():
     global but3
     global but4
     global screen1
-    urls = ["MMM", "AXP","AMGN","AAPL", "BA", "CAT", "CVX","CSCO","KO","DIS","DOW","GS","HD","HON","IBM","INTC","JNJ","MCD","MRK","MSFT","NKE","PG","CRM","TRV","UNH","V","WBA","WMT"]
+    global urls
+    #urls = ["MMM", "AXP","AMGN","AAPL", "BA", "CAT", "CVX","CSCO","KO","DIS","DOW","GS","HD","HON","IBM","INTC","JNJ","MCD","MRK","MSFT","NKE","PG","CRM","TRV","UNH","V","WBA","WMT"]
     if not scraperIsStarted:
         run_scraper(urls)
     if scraperIsDone:
@@ -311,13 +317,49 @@ def open_csv():
     os.system("start excel "+cfilename)
 
 def scrape_select():
+    screen.destroy()
+    enter_stock_window()
+   
+
+def enter_stocks():
+    global urls
     global screen2
-    global screen3
-    #global urls
+    num = int(float(numString.get()))
+    screen4.destroy()
+    screen2.destroy()
+    enter_stock_window()
+    
+def finish():
+    global screen2
+    global urls
+    screen2.destroy()
+    urls.append(tickerString.get())
+    #run_scraper(urls)
+    select_update()
+def enter_more():
+    global screen2
+    global urls
+    screen2.destroy()
+    urls.append(tickerString.get())
+    enter_stock_window()
+def enter_stock_window():
+    #screen1.destroy()
+    global screen2
+    #screen2 = Toplevel(screen)
     screen2 = Tk()
-    #screen3 = Tk()
-
-
+    screen2.title("Chart Opener")
+    screen2.geometry("600x450")
+    Label(screen2, text="Chart Opener", bg = "grey", width = "300", height = "2", font ={"Calibri", 13}).pack()
+    Label(screen2, text="",  width = "300", height = "1", font ={"Calibri", 13}).pack()
+    Label(screen2, text="Enter the ticker of the chart you would like to open:",  width = "300", height = "1", font ={"Calibri", 13}).pack()
+    global tickerString
+    tickerString = StringVar()
+    Entry(screen2, textvariable = tickerString).pack()
+    Label(text="",  width = "300", height = "1", font ={"Calibri", 13}).pack()
+    Button(screen2, text = "Scrape More", height="2", width = "30", command = enter_more).pack()
+    Label(text="",  width = "300", height = "1", font ={"Calibri", 13}).pack()
+    Button(screen2, text = "Done!", height="2", width = "30", command = finish).pack()
+    screen2.mainloop()
 def select_update():
     global scraperIsDone
     global scraperIsStarted
@@ -331,9 +373,35 @@ def select_update():
     global but3
     global but4
     global screen1
-    
+    screen1 = Tk()
+    screen1.geometry("500x500")
+    screen1.title("Yahoo Finance Scraper")
+    Label(screen1, text="Yahoo Finance Scraper", bg = "grey", width = "300", height = "2", font ={"Calibri", 13}).pack()
+    Label(screen1, text="",  width = "300", height = "1", font ={"Calibri", 13}).pack()
+    lab1 = Label(screen1, text="Scraping the Dow...",  width = "300", height = "1", font ={"Calibri", 13})
+    lab1.pack()
+    lab2 = Label(screen1)
+    lab2.pack()
+    lab3 = Label(screen1)
+    lab3.pack()
+    lab4 = Label(screen1)
+    lab4.pack()
+    lab5 = Label(screen1)
+    lab5.pack()
+    but1 = Button(screen1)
+    but1.pack_forget()
+    but2 = Button(screen1)
+    but2.pack_forget()
+    but3 = Button(screen1)
+    but3.pack_forget()
+    but4 = Button(screen1)
+    but4.pack_forget()
+    #select_update()  
+    dow_update()  
+    screen1.mainloop()
+    #select_update() 
     if not scraperIsStarted:
-        run_scraper()
+        run_scraper(urls)
     if scraperIsDone:
         lab1.config(text = "Scraping is complete!")
         lab2.config(text = "",  width = "300", height = "1", font ={"Calibri", 13})
