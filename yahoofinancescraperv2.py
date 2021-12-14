@@ -111,7 +111,7 @@ def scraper(url):
     names = soup.find_all('td',class_="data-col0 Ta(start) Pstart(10px) Bdstartw(8px) Bdstarts(s) Bdstartc(t) in-the-money_Bdstartc($linkColor)")
     # print(names)
     strikes = soup.find_all('td',class_="data-col2 Ta(end) Px(10px)")
-    value = soup.find('span',class_="Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)")
+    value = soup.find('fin-streamer',class_="Fw(b) Fz(36px) Mb(-4px) D(ib)")
     prices = soup.find_all('td',class_="data-col4 Ta(end) Pstart(7px)")
     #volatilities = soup.find_all('td',class_="data-col10 Ta(end) Pstart(7px) Pend(6px) Bdstartc(t)")
     a = []
